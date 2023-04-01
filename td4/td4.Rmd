@@ -1,0 +1,88 @@
+knitr::opts_chunk$set(echo = TRUE)
+
+---
+title: "TD4 - GGPLOT2 and Rmarkdown"
+output:
+  html_document:
+    df_print: paged
+---
+
+### Load necessary packages
+```{r}
+library(ggplot2)
+library(dplyr)
+```
+
+### View the diamonds dataset
+```{r}
+View(diamonds)
+```
+
+### Obtain a summary of the diamonds dataset
+```{r}
+glimpse(diamonds)
+summary(diamonds)
+```
+
+### Visualize the histogram of the price variable
+```{r}
+ggplot(diamonds, aes(x = price)) +
+  geom_histogram(bins = 20)
+```
+  
+### Visualize the histogram of the price variable for diamonds less than $5,000
+```{r}
+ggplot(diamonds %>% filter(price < 5000), aes(x = price)) +
+  geom_histogram(bins = 20)
+```
+  
+### Visualize a potential correlation between the x and y variables
+```{r}
+ggplot(diamonds, aes(x = x, y = y)) +
+  geom_point()
+```
+  
+### Filter the dataset to improve the visualization of x and y variables
+```{r}
+ggplot(diamonds %>% filter(x < 20 & y < 20), aes(x = x, y = y)) +
+  geom_point()
+```
+  
+### Determine if there is a correlation between carat and price, and color the observations by clarity
+```{r}
+ggplot(diamonds, aes(x = carat, y = price, color = clarity)) +
+  geom_point()
+```
+  
+### Add a single trendline to the carat-price correlation plot
+```{r}
+ggplot(diamonds, aes(x = carat, y = price, color = clarity)) +
+  geom_point() +
+  geom_smooth(method = "lm")
+```
+
+### Create a scatter plot of carat vs price for each clarity value using facet_grid()
+```{r}
+ggplot(diamonds, aes(x = carat, y = price)) +
+  geom_point() +
+  facet_grid(. ~ clarity)
+```
+
+### Visualize the distribution of price by cut using a violin plot
+```{r}
+ggplot(diamonds, aes(x = cut, y = price)) +
+  geom_violin()
+```
+  
+### Modify the previous histogram plot by adding an aesthetic fill by cut
+```{r}
+ggplot(diamonds %>% filter(price < 5000), aes(x = price, fill = cut)) +
+  geom_histogram(bins = 30) +
+  xlim(0, 5000)
+```
+
+### Create a bar chart of the average price of diamonds by color
+```{r}
+ggplot(diamonds, aes(x = color, y = price)) +
+  stat_summary(fun = mean, geom = "bar")
+```
